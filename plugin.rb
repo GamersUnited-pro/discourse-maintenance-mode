@@ -11,7 +11,7 @@ enabled_site_setting :maintenance_mode_enabled
 after_initialize do
   module ::DiscourseMaintenancePlugin
     PLUGIN_NAME = "discourse-maintenance-plugin"
-    PLUGIN_VERSION = "1.0.7"
+    PLUGIN_VERSION = "1.0.8"
     UPDATE_STORE_KEY = "last_notified_version"
   end
 
