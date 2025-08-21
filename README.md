@@ -24,7 +24,7 @@ Note: This has been tested when running Discourse in a container.
    ```bash
    - git clone --branch v1.0.6 https://github.com/GamersUnited-pro/discourse-maintenance-mode.git
    
-   Example:
+Example:
    ```bash
    hooks:
   after_code:
