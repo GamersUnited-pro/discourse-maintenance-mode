@@ -1,0 +1,11 @@
+maintenance_mode_enabled:
+  default: false
+  client: false
+  type: bool
+  description: "Enable maintenance mode for all non-admin/mod users"
+
+maintenance_mode_message:
+  default: "We are performing scheduled maintenance. Please check back soon."
+  client: false
+  type: text
+  description: "Message shown to users during maintenance"
