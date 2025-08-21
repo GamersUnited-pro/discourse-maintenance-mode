@@ -20,7 +20,7 @@ Note: This has been tested when running Discourse in a container
    nano containers/app.yaml
 
    --- Add below under cmd: in plugin section ---
-   - git clone --branch v1.0.3 https://github.com/GamersUnited-pro/discourse-maintenance-mode.git
+   - git clone --branch v1.0.4 https://github.com/GamersUnited-pro/discourse-maintenance-mode.git
 4. Rebuild your container
    ```bash
    ./launcher rebuild app
