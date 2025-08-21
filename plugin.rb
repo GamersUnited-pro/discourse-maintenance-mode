@@ -1,36 +1,39 @@
 # name: discourse-maintenance-mode
 # about: A simple toggleable maintenance mode plugin for Discourse
-# version: 1.0.4
+# version: 1.0.5
 # authors: GamersUnited.pro
 # url: https://github.com/GamersUnited-pro/discourse-maintenance-mode
 
 PLUGIN_NAME ||= "discourse-maintenance-mode".freeze
-PLUGIN_VERSION ||= "1.0.4".freeze
+PLUGIN_VERSION ||= "1.0.5".freeze
 
 enabled_site_setting :maintenance_mode_enabled
 
 after_initialize do
   require_dependency "application_controller"
-  require 'net/http'
-  require 'json'
 
   # -----------------------------
   # Module for release checking
   # -----------------------------
   module ::DiscourseMaintenanceMode
     class << self
-      # Fetch latest release tag from GitHub
+      # Fetch latest release tag from GitHub safely
       def latest_release
-        url = URI("https://api.github.com/repos/GamersUnited-pro/discourse-maintenance-mode/releases/latest")
-        res = Net::HTTP.get_response(url)
-        return nil unless res.is_a?(Net::HTTPSuccess)
-        data = JSON.parse(res.body)
-        data["tag_name"]
-      rescue
-        nil
+        @latest_release ||= begin
+          url = URI("https://api.github.com/repos/GamersUnited-pro/discourse-maintenance-mode/releases/latest")
+          res = Net::HTTP.get_response(url)
+          if res.is_a?(Net::HTTPSuccess)
+            data = JSON.parse(res.body)
+            data["tag_name"]
+          else
+            nil
+          end
+        rescue => e
+          Rails.logger.warn("Maintenance mode plugin update check failed: #{e.message}")
+          nil
+        end
       end
 
-      # Compare current plugin version to latest release
       def update_available?
         latest = latest_release
         return false unless latest
@@ -40,13 +43,23 @@ after_initialize do
   end
 
   # -----------------------------
-  # Admin notification if update is available
+  # Notify admin on first web request, not at build time
   # -----------------------------
-  if ::DiscourseMaintenanceMode.update_available?
-    AdminNotification.create!(
-      notification_type: AdminNotification.types[:custom],
-      message: "A new version of Discourse Maintenance Mode is available: #{::DiscourseMaintenanceMode.latest_release}. Please update!"
-    )
+  class ::DiscourseMaintenanceMode::Notifier
+    def self.notify_if_update_available
+      return unless defined?(AdminNotification)
+      return unless ::DiscourseMaintenanceMode.update_available?
+
+      AdminNotification.create!(
+        notification_type: AdminNotification.types[:custom],
+        message: "A new version of Discourse Maintenance Mode is available: #{::DiscourseMaintenanceMode.latest_release}. Please update!"
+      )
+    end
+  end
+
+  # Hook into a safe controller action after Rails boots
+  on(:site_setting_changed) do |name, old_value, new_value|
+    ::DiscourseMaintenanceMode::Notifier.notify_if_update_available
   end
 
   # -----------------------------
