@@ -33,6 +33,7 @@ Example:
         cmd:
           - git clone https://github.com/discourse/docker_manager.git
           - git clone --branch v1.0.6 https://github.com/GamersUnited-pro/discourse-maintenance-mode.git
+
 3. Rebuild your container:
    ```bash
    echo "- git clone --branch v1.0.6 https://github.com/GamersUnited-pro/discourse-maintenance-mode.git" >> containers/app.yml && ./launcher rebuild app
