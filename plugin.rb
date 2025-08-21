@@ -1,8 +1,11 @@
-# plugins/discourse-maintenance-mode/plugin.rb
-# frozen_string_literal: true
+# name: discourse-maintenance-mode
+# about: A simple toggleable maintenance mode plugin for Discourse
+# version: 1.0.3
+# authors: GamersUnited.pro
+# url: https://github.com/GamersUnited-pro/discourse-maintenance-mode
 
 PLUGIN_NAME ||= "discourse-maintenance-mode".freeze
-PLUGIN_VERSION ||= "1.0.2".freeze
+PLUGIN_VERSION ||= "1.0.3".freeze
 
 enabled_site_setting :maintenance_mode_enabled
 
