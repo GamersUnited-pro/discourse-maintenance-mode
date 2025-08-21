@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 
 PLUGIN_NAME ||= "discourse-maintenance-mode".freeze
-PLUGIN_VERSION ||= "1.0.1".freeze
+PLUGIN_VERSION ||= "1.0.2".freeze
 
 enabled_site_setting :maintenance_mode_enabled
 
