@@ -27,7 +27,7 @@ Note: This has been tested when running Discourse in a container.
 Example:
    ```bash
    hooks:
-  after_code:
+   after_code:
     - exec:
         cd: $home/plugins
         cmd:
