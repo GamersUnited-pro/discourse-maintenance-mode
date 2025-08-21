@@ -9,3 +9,9 @@ maintenance_mode_message:
   client: false
   type: text
   description: "Message shown to users during maintenance"
+
+maintenance_mode_title:
+  default: "Site Under Maintenance"
+  client: false
+  type: text
+  description: "Title shown on maintenance page and browser tab"
