@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title><%= @title %></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg1:#0f1220; --bg2:#1a1f3c; --card:#12162a; --acc:#6ee7ff; --acc2:#eab308; --muted:#aab3c5;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      background: radial-gradient(1200px 600px at 80% 10%, var(--bg2), transparent 60%),
+                  radial-gradient(1000px 800px at 10% 90%, #10152a, transparent 60%),
+                  linear-gradient(180deg, var(--bg1), #0b0e1a 70%);
+      color: #fff;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+    .card {
+      width: min(720px, 92vw);
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      padding: 40px 32px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+      backdrop-filter: blur(6px);
+      position: relative;
+      overflow: hidden;
+    }
+    .card:before, .card:after {
+      content: "";
+      position: absolute;
+      width: 220px; height: 220px;
+      background: radial-gradient(circle, rgba(110,231,255,0.35), transparent 60%);
+      filter: blur(8px);
+      border-radius: 50%;
+      z-index: 0;
+    }
+    .card:before { top:-60px; left:-60px; }
+    .card:after  { bottom:-60px; right:-40px; background: radial-gradient(circle, rgba(234,179,8,0.28), transparent 60%); }
+    .content { position: relative; z-index: 1; }
+
+    h1 {
+      font-size: clamp(28px, 5vw, 44px);
+      line-height: 1.1;
+      margin: 0 0 14px;
+      letter-spacing: .3px;
+      background: linear-gradient(90deg, #fff, var(--acc));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    p {
+      color: var(--muted);
+      font-size: clamp(16px, 2.4vw, 18px);
+      line-height: 1.7;
+      margin: 0 0 24px;
+    }
+    .hint {
+      font-size: 14px;
+      opacity: .8;
+    }
+    .spinner {
+      width: 28px; height: 28px; border-radius: 50%;
+      border: 3px solid rgba(255,255,255,0.2);
+      border-top-color: var(--acc2);
+      animation: spin 1s linear infinite;
+      margin: 12px auto 0;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+
+  <script>
+    (function() {
+      // Auto-redirect when maintenance ends
+      var intervalSec = <%= @interval %> || 15;
+      function poll() {
+        fetch("/site_settings/maintenance_mode_enabled.json", { credentials: "same-origin" })
+          .then(function(r){ return r.ok ? r.json() : { maintenance_mode_enabled: true }; })
+          .then(function(d) {
+            if (d && d.maintenance_mode_enabled === false) window.location.replace("/");
+          })
+          .catch(function(){ /* ignore */ });
+      }
+      setInterval(poll, intervalSec * 1000);
+    })();
+  </script>
+</head>
+<body>
+  <div class="card">
+    <div class="content">
+      <h1><%= @title %></h1>
+      <p><%= @message %></p>
+      <p class="hint">Your place is saved. This page will automatically refresh when we're back.</p>
+      <div class="spinner" aria-hidden="true"></div>
+    </div>
+  </div>
+</body>
+</html>
