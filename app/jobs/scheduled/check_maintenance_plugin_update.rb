@@ -40,7 +40,6 @@ module ::Jobs
       last = PluginStore.get(::DiscourseMaintenancePlugin::PLUGIN_NAME, ::DiscourseMaintenancePlugin::UPDATE_STORE_KEY)
       return if last == latest
 
-      # Admin-only notification
       if defined?(::AdminNotification)
         ::AdminNotification.create!(
           notification_type: ::AdminNotification.types[:custom],
