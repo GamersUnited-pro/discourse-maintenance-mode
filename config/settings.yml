@@ -4,14 +4,26 @@ maintenance_mode_enabled:
   type: bool
   description: "Enable maintenance mode for all non-admin/mod users"
 
+maintenance_mode_title:
+  default: "Site Under Maintenance"
+  client: false
+  type: text
+  description: "Title shown on the maintenance page and browser tab"
+
 maintenance_mode_message:
   default: "We are performing scheduled maintenance. Please check back soon."
   client: false
   type: text
   description: "Message shown to users during maintenance"
 
-maintenance_mode_title:
-  default: "Site Under Maintenance"
+maintenance_refresh_interval:
+  default: 15
+  client: true
+  type: integer
+  description: "Seconds between client checks to auto-redirect when maintenance ends"
+
+maintenance_update_repo:
+  default: "GamersUnited-pro/discourse-maintenance-mode"
   client: false
   type: text
-  description: "Title shown on maintenance page and browser tab"
+  description: "owner/repo for GitHub release checks (admins only)"
