@@ -1,7 +1,7 @@
 maintenance_mode_enabled:
   default: false
   client: false
-  type: boolean
+  type: bool
   description: "Enable maintenance mode for all non-admin/mod users"
 
 maintenance_mode_title:
