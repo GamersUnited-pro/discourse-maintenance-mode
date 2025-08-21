@@ -1,23 +1,21 @@
 # name: discourse-maintenance-mode
 # about: A simple toggleable maintenance mode plugin for Discourse
-# version: 1.0.6
+# version: 1.0.7
 # authors: GamersUnited.pro
 # url: https://github.com/GamersUnited-pro/discourse-maintenance-mode
 
 PLUGIN_NAME ||= "discourse-maintenance-mode".freeze
-PLUGIN_VERSION ||= "1.0.6".freeze
+PLUGIN_VERSION ||= "1.0.7".freeze
 
 enabled_site_setting :maintenance_mode_enabled
 
 after_initialize do
   require_dependency "application_controller"
+  require 'net/http'
+  require 'json'
 
-  # -----------------------------
-  # Module for release checking
-  # -----------------------------
   module ::DiscourseMaintenanceMode
     class << self
-      # Fetch latest release tag from GitHub safely
       def latest_release
         @latest_release ||= begin
           url = URI("https://api.github.com/repos/GamersUnited-pro/discourse-maintenance-mode/releases/latest")
@@ -42,9 +40,6 @@ after_initialize do
     end
   end
 
-  # -----------------------------
-  # Notify admin on first web request, not at build time
-  # -----------------------------
   class ::DiscourseMaintenanceMode::Notifier
     def self.notify_if_update_available
       return unless defined?(AdminNotification)
@@ -57,37 +52,33 @@ after_initialize do
     end
   end
 
-  # Hook into a safe controller action after Rails boots
+  # Notify on first web request
   on(:site_setting_changed) do |name, old_value, new_value|
     ::DiscourseMaintenanceMode::Notifier.notify_if_update_available
   end
 
   # -----------------------------
-  # Patch ApplicationController for maintenance mode
+  # Patch ApplicationController safely
   # -----------------------------
-  class ::ApplicationController
+  ::ApplicationController.class_eval do
     before_action :check_maintenance_mode
 
     def check_maintenance_mode
       return unless SiteSetting.maintenance_mode_enabled
 
-      # Allow admins and moderators full access
-      return if current_user && (current_user.admin? || current_user.moderator?)
+      return if current_user&.admin? || current_user&.moderator?
 
-      # Allow login, registration, and activation pages during maintenance
       allowed_paths = [
         "/login",
         "/logout",
         "/session",
-        "/users",
         "/user_activations",
-        "/password_resets",
-        "/site_settings",
-        "/notifications"
+        "/password_resets"
       ]
-      return if allowed_paths.any? { |path| request.path.start_with?(path) }
 
-      # Render maintenance page template
+      return if allowed_paths.any? { |path| request.path.start_with?(path) }
+      return if request.format.json? # allow API requests
+
       render template: "discourse_maintenance_mode/maintenance", layout: false
     end
   end
