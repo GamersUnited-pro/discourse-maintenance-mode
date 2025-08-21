@@ -12,8 +12,15 @@ A simple Discourse plugin to enable a toggleable maintenance mode.
 
 ## Installation
 
-1. Copy or clone this plugin into your Discourse `plugins/` directory:
+Note: This has been tested when running Discourse in a container
 
+1. Edit your app.yaml:
    ```bash
-   cd /var/discourse/plugins
-   git clone <your-repo-url> discourse-maintenance-mode
+   cd discourse
+   nano containers/app.yaml
+
+   --- Add below under cmd: in plugin section ---
+   - git clone --branch v1.0.0 https://github.com/GamersUnited-pro/discourse-maintenance-mode.git```
+4. Rebuild your container
+   ```bash
+   ./launcher rebuild app```
