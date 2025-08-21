@@ -2,7 +2,7 @@
 
 # name: discourse-maintenance-mode
 # about: Toggleable maintenance mode with stylish page + admin-only update notifications
-# version: 1.0.8
+# version: 1.0.9
 # authors: GamersUnited.pro
 # url: https://github.com/GamersUnited-pro/discourse-maintenance-plugin
 
@@ -11,9 +11,15 @@ enabled_site_setting :maintenance_mode_enabled
 after_initialize do
   module ::DiscourseMaintenancePlugin
     PLUGIN_NAME = "discourse-maintenance-plugin"
-    PLUGIN_VERSION = "1.0.8"
+    PLUGIN_VERSION = "1.0.9"
     UPDATE_STORE_KEY = "last_notified_version"
   end
+
+  # -----------------------------
+  # Require our controllers & jobs
+  # -----------------------------
+  require_dependency File.expand_path("../app/controllers/maintenance_controller.rb", __FILE__)
+  require_dependency File.expand_path("../app/jobs/scheduled/check_maintenance_plugin_update.rb", __FILE__)
 
   # -----------------------------
   # Routes
@@ -52,7 +58,7 @@ after_initialize do
           return
         end
 
-        # JSON/API requests: respond with 503 minimal JSON to avoid 500s/content-negotiation issues
+        # JSON/API requests: respond with 503 minimal JSON
         unless request.format.html?
           render json: {
             error: "maintenance_in_progress",
@@ -61,14 +67,15 @@ after_initialize do
           return
         end
 
-        # HTML requests: render our page (no Discourse layout to avoid asset dependencies)
+        # HTML requests: render our page (no Discourse layout to avoid asset deps)
         render template: "maintenance/index", layout: false, status: 503
       end
     end
   end
 
   # -----------------------------
-  # Admin-only update notification (scheduled, no boot-time HTTP)
+  # Admin-only update notification
   # -----------------------------
-  # See app/jobs/scheduled/check_maintenance_plugin_update.rb
+  # Implemented in:
+  # app/jobs/scheduled/check_maintenance_plugin_update.rb
 end
