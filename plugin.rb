@@ -1,11 +1,11 @@
 # name: discourse-maintenance-mode
 # about: A simple toggleable maintenance mode plugin for Discourse
-# version: 1.0.3
+# version: 1.0.4
 # authors: GamersUnited.pro
 # url: https://github.com/GamersUnited-pro/discourse-maintenance-mode
 
 PLUGIN_NAME ||= "discourse-maintenance-mode".freeze
-PLUGIN_VERSION ||= "1.0.3".freeze
+PLUGIN_VERSION ||= "1.0.4".freeze
 
 enabled_site_setting :maintenance_mode_enabled
 
