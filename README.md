@@ -22,7 +22,7 @@ Note: This has been tested when running Discourse in a container.
    nano containers/app.yml
 2. Under the `hooks:` → `after_code:` → `cmd:` section (where `docker_manager` is), add:
    ```bash
-   - git clone --branch v1.0.6 https://github.com/GamersUnited-pro/discourse-maintenance-mode.git
+   - git clone --branch v1.0.6 https://github.com/GamersUnited-pro/discourse-maintenance-mode.git```
    Example:
    ```bash
    hooks:
