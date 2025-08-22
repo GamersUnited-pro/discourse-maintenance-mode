@@ -23,7 +23,7 @@ Note: This has been tested when running Discourse in a container.
    ```
 2. Under the `hooks:` → `after_code:` → `cmd:` section (where `docker_manager` is), add:
    ```bash
-   - git clone --branch v1.0.26 https://github.com/GamersUnited-pro/discourse-maintenance-mode.git
+   - git clone --branch v1.0.27 https://github.com/GamersUnited-pro/discourse-maintenance-mode.git
    ```
    
    Example:
@@ -34,18 +34,18 @@ Note: This has been tested when running Discourse in a container.
         cd: $home/plugins
         cmd:
           - git clone https://github.com/discourse/docker_manager.git
-          - git clone --branch v1.0.26 https://github.com/GamersUnited-pro/discourse-maintenance-mode.git
+          - git clone --branch v1.0.27 https://github.com/GamersUnited-pro/discourse-maintenance-mode.git
    ```
 
 3. Rebuild your container:
    ```bash
-   echo "- git clone --branch v1.0.26 https://github.com/GamersUnited-pro/discourse-maintenance-mode.git" >> containers/app.yml && ./launcher rebuild app
+   echo "- git clone --branch v1.0.27 https://github.com/GamersUnited-pro/discourse-maintenance-mode.git" >> containers/app.yml && ./launcher rebuild app
    ```
 
 ### Method 2: Quick one-liner install
 From `/discourse` (wherever you installed the Discourse container), run:
    ```bash
-   echo "- git clone --branch v1.0.26 https://github.com/GamersUnited-pro/discourse-maintenance-mode.git" >> containers/app.yml && ./launcher rebuild app
+   echo "- git clone --branch v1.0.27 https://github.com/GamersUnited-pro/discourse-maintenance-mode.git" >> containers/app.yml && ./launcher rebuild app
    ```
 
 ### Usage
