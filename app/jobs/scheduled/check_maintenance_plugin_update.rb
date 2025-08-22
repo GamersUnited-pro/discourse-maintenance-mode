@@ -40,13 +40,13 @@ module ::Jobs
       last = PluginStore.get(::DiscourseMaintenancePlugin::PLUGIN_NAME, ::DiscourseMaintenancePlugin::UPDATE_STORE_KEY)
       return if last == latest
 
-      if defined?(::AdminNotification)
-        ::AdminNotification.create!(
-          notification_type: ::AdminNotification.types[:custom],
-          topic_title: "Maintenance plugin update available",
-          message: "A new version (#{latest}) of #{::DiscourseMaintenancePlugin::PLUGIN_NAME} is available on GitHub. Current: #{current}."
-        )
-      end
+      #if defined?(::AdminNotification)
+      #  ::AdminNotification.create!(
+      #    notification_type: ::AdminNotification.types[:custom],
+      #    topic_title: "Maintenance plugin update available",
+      #    message: "A new version (#{latest}) of #{::DiscourseMaintenancePlugin::PLUGIN_NAME} is available on GitHub. Current: #{current}."
+      #  )
+      #end
 
       PluginStore.set(::DiscourseMaintenancePlugin::PLUGIN_NAME, ::DiscourseMaintenancePlugin::UPDATE_STORE_KEY, latest)
     end
