@@ -52,6 +52,7 @@ after_initialize do
         /assets /plugins /stylesheets /favicon
         /letter_avatar_proxy /letter_avatar
         /humans.txt /robots.txt /manifest /service-worker
+        /auth
       ]
 
       path = request.path
