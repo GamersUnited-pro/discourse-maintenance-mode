@@ -13,4 +13,11 @@ class ::MaintenanceController < ::ApplicationController
     @message = SiteSetting.maintenance_mode_message.presence || "The forum is currently under maintenance. Please check back later."
     @interval = (SiteSetting.maintenance_refresh_interval || 15).to_i
   end
+
+  def status
+    render_json_dump(
+      enabled: SiteSetting.maintenance_mode_enabled,
+      interval: (SiteSetting.maintenance_refresh_interval || 15).to_i
+    )
+  end
 end
