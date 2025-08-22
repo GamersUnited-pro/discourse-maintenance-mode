@@ -1,6 +1,6 @@
 import { apiInitializer } from "discourse/lib/api";
 
-export default apiInitializer("0.11.1", () => {
+export default apiInitializer("0.11.1", (api) => {
   const DEFAULT_INTERVAL = 15;
   let intervalSec = DEFAULT_INTERVAL;
 
@@ -16,9 +16,14 @@ export default apiInitializer("0.11.1", () => {
         if (d && typeof d.interval === "number") {
           intervalSec = d.interval || DEFAULT_INTERVAL;
         }
+
+        // ✅ Only redirect non-staff users
         if (d && d.enabled) {
-          if (window.location.pathname !== "/maintenance") {
-            window.location.replace("/maintenance");
+          const user = api.getCurrentUser();
+          if (!user || !user.staff) {
+            if (window.location.pathname !== "/maintenance") {
+              window.location.replace("/maintenance");
+            }
           }
         }
       })
