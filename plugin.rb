@@ -2,7 +2,7 @@
 
 # name: discourse-maintenance-mode
 # about: Toggleable maintenance mode with stylish page + admin-only update notifications
-# version: 1.0.19
+# version: 1.0.20
 # authors: GamersUnited.pro
 # url: https://github.com/GamersUnited-pro/discourse-maintenance-plugin
 
@@ -10,7 +10,7 @@ enabled_site_setting :maintenance_mode_enabled
 
 module ::DiscourseMaintenancePlugin
   PLUGIN_NAME = "discourse-maintenance-plugin"
-  PLUGIN_VERSION = "1.0.19"
+  PLUGIN_VERSION = "1.0.20"
   UPDATE_STORE_KEY = "last_notified_version"
 end
 
@@ -72,4 +72,8 @@ after_initialize do
   end
 
   ::ApplicationController.prepend(::DiscourseMaintenancePlugin::MaintenanceGate)
+
+  ::ApplicationController.class_eval do
+    before_action :discourse_maintenance_check
+  end
 end
