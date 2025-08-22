@@ -2,7 +2,7 @@
 
 # name: discourse-maintenance-mode
 # about: Toggleable maintenance mode with stylish page + admin-only update notifications
-# version: 1.0.22
+# version: 1.0.23
 # authors: GamersUnited.pro
 # url: https://github.com/GamersUnited-pro/discourse-maintenance-plugin
 
@@ -10,7 +10,7 @@ enabled_site_setting :maintenance_mode_enabled
 
 module ::DiscourseMaintenancePlugin
   PLUGIN_NAME = "discourse-maintenance-plugin"
-  PLUGIN_VERSION = "1.0.22"
+  PLUGIN_VERSION = "1.0.23"
   UPDATE_STORE_KEY = "last_notified_version"
 end
 
@@ -22,6 +22,11 @@ after_initialize do
   require_dependency File.expand_path("app/jobs/scheduled/check_maintenance_plugin_update.rb", __dir__)
 
   # -----------------------------
+  # Make plugin views available globally
+  # -----------------------------
+  ApplicationController.append_view_path File.expand_path("app/views", __dir__)
+
+  # -----------------------------
   # Routes
   # -----------------------------
   Discourse::Application.routes.append do
@@ -29,16 +34,16 @@ after_initialize do
   end
 
   # -----------------------------
-  # Safe, Rails 8 compatible maintenance gate
+  # Maintenance gate
   # -----------------------------
   module ::DiscourseMaintenancePlugin::MaintenanceGate
     def discourse_maintenance_check
       return unless SiteSetting.maintenance_mode_enabled
 
       # Always allow admins & moderators
-      return if current_user && (current_user.admin? || current_user.moderator?)
+      return if current_user&.admin? || current_user&.moderator?
 
-      # Allow key system and auth paths while in maintenance
+      # Allowed prefixes (public pages, login, assets)
       allowed_prefixes = %w[
         /maintenance
         /login /logout /session
@@ -50,37 +55,19 @@ after_initialize do
       ]
 
       path = request.path
-      if allowed_prefixes.any? { |p| path.start_with?(p) }
-        return
-      end
+      return if allowed_prefixes.any? { |p| path.start_with?(p) }
 
-      # JSON/API requests: respond with 503 minimal JSON
+      # JSON/API requests: minimal 503 response
       unless request.format.html?
-        render json: {
-          error: "maintenance_in_progress",
-          message: SiteSetting.maintenance_mode_message
-        }, status: 503
+        render json: { error: "maintenance_in_progress", message: SiteSetting.maintenance_mode_message }, status: 503
         return
       end
 
-      # HTML requests: render our page (no Discourse layout to avoid asset deps)
-      render "maintenance/index",
-        layout: false,
-        formats: [:html],
-        status: 503
+      # HTML requests: render our maintenance page (no layout)
+      render "maintenance/index", layout: false, formats: [:html], status: 503
     end
   end
 
   ::ApplicationController.prepend(::DiscourseMaintenancePlugin::MaintenanceGate)
-
-  ::ApplicationController.class_eval do
-    before_action :discourse_maintenance_check
-  end
-
-  # -----------------------------
-  # Ensure plugin views are available globally
-  # -----------------------------
-  ActiveSupport::Reloader.to_prepare do
-    ActionController::Base.append_view_path File.expand_path("app/views", __dir__)
-  end
+  ::ApplicationController.before_action :discourse_maintenance_check
 end
