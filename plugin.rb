@@ -2,7 +2,7 @@
 
 # name: discourse-maintenance-mode
 # about: Toggleable maintenance mode with stylish page + admin-only update notifications
-# version: 1.0.18
+# version: 1.0.19
 # authors: GamersUnited.pro
 # url: https://github.com/GamersUnited-pro/discourse-maintenance-plugin
 
@@ -10,7 +10,7 @@ enabled_site_setting :maintenance_mode_enabled
 
 module ::DiscourseMaintenancePlugin
   PLUGIN_NAME = "discourse-maintenance-plugin"
-  PLUGIN_VERSION = "1.0.18"
+  PLUGIN_VERSION = "1.0.19"
   UPDATE_STORE_KEY = "last_notified_version"
 end
 
@@ -64,7 +64,10 @@ after_initialize do
       end
 
       # HTML requests: render our page (no Discourse layout to avoid asset deps)
-      render template: "maintenance/index", layout: false, status: 503
+      render template: "maintenance/index",
+        layout: false,
+        formats: [:html],
+        status: 503
     end
   end
 
