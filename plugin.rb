@@ -2,7 +2,7 @@
 
 # name: discourse-maintenance-mode
 # about: Toggleable maintenance mode with stylish page + admin-only update notifications
-# version: 1.0.21
+# version: 1.0.22
 # authors: GamersUnited.pro
 # url: https://github.com/GamersUnited-pro/discourse-maintenance-plugin
 
@@ -10,12 +10,11 @@ enabled_site_setting :maintenance_mode_enabled
 
 module ::DiscourseMaintenancePlugin
   PLUGIN_NAME = "discourse-maintenance-plugin"
-  PLUGIN_VERSION = "1.0.21"
+  PLUGIN_VERSION = "1.0.22"
   UPDATE_STORE_KEY = "last_notified_version"
 end
 
 after_initialize do
-
   # -----------------------------
   # Require our controllers & jobs
   # -----------------------------
@@ -35,6 +34,7 @@ after_initialize do
   module ::DiscourseMaintenancePlugin::MaintenanceGate
     def discourse_maintenance_check
       return unless SiteSetting.maintenance_mode_enabled
+
       # Always allow admins & moderators
       return if current_user && (current_user.admin? || current_user.moderator?)
 
@@ -64,7 +64,7 @@ after_initialize do
       end
 
       # HTML requests: render our page (no Discourse layout to avoid asset deps)
-      render template: "maintenance/index",
+      render "maintenance/index",
         layout: false,
         formats: [:html],
         status: 503
@@ -77,7 +77,10 @@ after_initialize do
     before_action :discourse_maintenance_check
   end
 
+  # -----------------------------
+  # Ensure plugin views are available globally
+  # -----------------------------
   ActiveSupport::Reloader.to_prepare do
-    MaintenanceController.append_view_path File.expand_path("app/views", __dir__)
+    ActionController::Base.append_view_path File.expand_path("app/views", __dir__)
   end
 end
