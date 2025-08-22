@@ -5,7 +5,6 @@ export default apiInitializer("0.11.1", (api) => {
   let intervalSec = DEFAULT_INTERVAL;
 
   function readIntervalFromMeta() {
-    // fallback – interval setting is not critical for this poller
     return intervalSec;
   }
 
@@ -17,10 +16,10 @@ export default apiInitializer("0.11.1", (api) => {
           intervalSec = d.interval || DEFAULT_INTERVAL;
         }
 
-        // ✅ Only redirect non-staff users
+        // Only redirect logged-in non-staff users
         if (d && d.enabled) {
           const user = api.getCurrentUser();
-          if (!user || !user.staff) {
+          if (user && !user.staff) {
             if (window.location.pathname !== "/maintenance") {
               window.location.replace("/maintenance");
             }
@@ -30,7 +29,6 @@ export default apiInitializer("0.11.1", (api) => {
       .catch(() => {});
   }
 
-  // initial check + polling
   check();
   setInterval(check, readIntervalFromMeta() * 1000);
 });
