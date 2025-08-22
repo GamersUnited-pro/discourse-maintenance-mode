@@ -6,7 +6,7 @@ require "uri"
 
 module ::Jobs
   class CheckMaintenancePluginUpdate < ::Jobs::Scheduled
-    every 1.day
+    every 5.minutes
 
     def execute(_args)
       repo = SiteSetting.maintenance_update_repo.presence
