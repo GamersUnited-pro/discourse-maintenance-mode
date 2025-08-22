@@ -27,4 +27,5 @@ plugins:
     default: "GamersUnited-pro/discourse-maintenance-mode"
     client: false
     type: text
+    readonly: true
     description: "owner/repo for GitHub release checks (admins only)"
