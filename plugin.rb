@@ -2,7 +2,7 @@
 
 # name: discourse-maintenance-mode
 # about: Toggleable maintenance mode with stylish page + admin-only update notifications
-# version: 1.0.27
+# version: 1.0.28
 # authors: GamersUnited.pro
 # url: https://github.com/GamersUnited-pro/discourse-maintenance-plugin
 
@@ -10,13 +10,14 @@ enabled_site_setting :maintenance_mode_enabled
 
 module ::DiscourseMaintenancePlugin
   PLUGIN_NAME = "discourse-maintenance-plugin"
-  PLUGIN_VERSION = "1.0.27"
+  PLUGIN_VERSION = "1.0.28"
   UPDATE_STORE_KEY = "last_notified_version"
 end
 
 after_initialize do
   require_dependency File.expand_path("app/controllers/maintenance_controller.rb", __dir__)
   require_dependency File.expand_path("app/jobs/scheduled/check_maintenance_plugin_update.rb", __dir__)
+  require_dependency File.expand_path("app/controllers/discourse_maintenance_plugin/admin_controller.rb", __dir__)
 
   # Make plugin views available globally
   ApplicationController.append_view_path File.expand_path("app/views", __dir__)
