@@ -83,6 +83,26 @@
       <p><%= @message %></p>
       <p class="hint">Your place is saved. This page will automatically refresh when we're back.</p>
       <div class="spinner" aria-hidden="true"></div>
+
+      <div style="text-align: center; margin-top: 24px;">
+        <a href="https://your-drupal-site.example.com/user/login" 
+           style="
+             display: inline-block;
+             padding: 12px 24px;
+             font-size: 16px;
+             font-weight: 600;
+             color: #0f1220;
+             background: linear-gradient(90deg, #6ee7ff, #eab308);
+             border-radius: 12px;
+             text-decoration: none;
+             transition: transform 0.1s ease-in-out;
+           "
+           onmouseover="this.style.transform='scale(1.05)';"
+           onmouseout="this.style.transform='scale(1)';"
+        >
+          Login
+        </a>
+      </div>
     </div>
   </div>
 </body>
