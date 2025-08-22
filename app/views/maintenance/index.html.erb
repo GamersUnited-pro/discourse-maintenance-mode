@@ -74,22 +74,6 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
   </style>
-
-  <script>
-    (function() {
-      // Auto-redirect when maintenance ends
-      var intervalSec = <%= @interval %> || 15;
-      function poll() {
-        fetch("/site_settings/maintenance_mode_enabled.json", { credentials: "same-origin" })
-          .then(function(r){ return r.ok ? r.json() : { maintenance_mode_enabled: true }; })
-          .then(function(d) {
-            if (d && d.maintenance_mode_enabled === false) window.location.replace("/");
-          })
-          .catch(function(){ /* ignore */ });
-      }
-      setInterval(poll, intervalSec * 1000);
-    })();
-  </script>
 </head>
 <body>
   <div class="card">
