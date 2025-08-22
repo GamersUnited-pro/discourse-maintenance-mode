@@ -62,4 +62,8 @@ after_initialize do
 
   ::ApplicationController.prepend(::DiscourseMaintenancePlugin::MaintenanceGate)
   ::ApplicationController.before_action :discourse_maintenance_check
+
+  register_admin_page_link "discourse-maintenance-mode" do
+    render partial: "admin/plugins/discourse-maintenance-mode/update_notice"
+  end
 end
