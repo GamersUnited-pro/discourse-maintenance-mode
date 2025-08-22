@@ -5,10 +5,13 @@ module ::DiscourseMaintenancePlugin
     requires_plugin DiscourseMaintenancePlugin::PLUGIN_NAME
 
     def version
-      render json: {
+      render_json_dump(
         current_version: DiscourseMaintenancePlugin::PLUGIN_VERSION,
-        latest_version: PluginStore.get(DiscourseMaintenancePlugin::PLUGIN_NAME, DiscourseMaintenancePlugin::UPDATE_STORE_KEY)
-      }
+        latest_version: PluginStore.get(
+          DiscourseMaintenancePlugin::PLUGIN_NAME,
+          DiscourseMaintenancePlugin::UPDATE_STORE_KEY
+        )
+      )
     end
   end
 end
