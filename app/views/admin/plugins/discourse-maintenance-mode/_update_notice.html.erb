@@ -1,0 +1,8 @@
+<% latest = PluginStore.get(::DiscourseMaintenancePlugin::PLUGIN_NAME, ::DiscourseMaintenancePlugin::UPDATE_STORE_KEY) %>
+<% current = ::DiscourseMaintenancePlugin::PLUGIN_VERSION %>
+<% if latest.present? && Gem::Version.new(latest) > Gem::Version.new(current) %>
+  <div class="alert alert-warning">
+    A new version of Discourse Maintenance Plugin is available: <strong><%= latest %></strong> (current: <%= current %>).
+    <a href="https://github.com/GamersUnited-pro/discourse-maintenance-plugin/releases/latest" target="_blank">View release</a>
+  </div>
+<% end %>
