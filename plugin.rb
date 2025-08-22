@@ -15,7 +15,7 @@ module ::DiscourseMaintenancePlugin
 end
 
 # NEW: ensure the client-side poller ships with the app
-register_asset "javascripts/discourse/initializers/maintenance-poller.js"
+#register_asset "javascripts/discourse/initializers/maintenance-poller.js"
 
 after_initialize do
   # -----------------------------
