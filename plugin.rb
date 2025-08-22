@@ -28,6 +28,11 @@ after_initialize do
     get "/maintenance" => "maintenance#index"
   end
 
+  Discourse::Application.routes.append do
+    get "/admin/plugins/discourse-maintenance-mode/version" =>
+      "discourse_maintenance_plugin/admin#version"
+  end
+
   module ::DiscourseMaintenancePlugin::MaintenanceGate
     def discourse_maintenance_check
       return unless SiteSetting.maintenance_mode_enabled
