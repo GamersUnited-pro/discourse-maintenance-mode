@@ -2,24 +2,21 @@
 
 # name: discourse-maintenance-mode
 # about: Toggleable maintenance mode with stylish page + admin-only update notifications
-# version: 1.0.30
+# version: 1.0.31
 # authors: GamersUnited.pro
 # url: https://github.com/GamersUnited-pro/discourse-maintenance-mode
 
 enabled_site_setting :maintenance_mode_enabled
 
 module ::DiscourseMaintenancePlugin
-  PLUGIN_NAME = "discourse-maintenance-plugin"
-  PLUGIN_VERSION = "1.0.30"
+  PLUGIN_NAME = "discourse-maintenance-mode"
+  PLUGIN_VERSION = "1.0.31"
   UPDATE_STORE_KEY = "last_notified_version"
 end
 
-# NEW: ensure the client-side poller ships with the app
-#register_asset "javascripts/discourse/initializers/maintenance-poller.js"
-
 after_initialize do
   # -----------------------------
-  # Require our controllers & jobs
+  # Require controllers & jobs
   # -----------------------------
   require_dependency File.expand_path("app/controllers/maintenance_controller.rb", __dir__)
   require_dependency File.expand_path("app/jobs/scheduled/check_maintenance_plugin_update.rb", __dir__)
@@ -34,8 +31,6 @@ after_initialize do
   # -----------------------------
   Discourse::Application.routes.append do
     get "/maintenance" => "maintenance#index"
-
-    # NEW: lightweight JSON endpoint the client and maintenance page can poll
     get "/maintenance/status" => "maintenance#status"
   end
 
@@ -46,10 +41,10 @@ after_initialize do
     def discourse_maintenance_check
       return unless SiteSetting.maintenance_mode_enabled
 
-      # Always allow admins & moderators
+      # Admins/mods always allowed
       return if current_user&.admin? || current_user&.moderator?
 
-      # Allowed prefixes (public pages, login, assets)
+      # Allowed paths for guests
       allowed_prefixes = %w[
         /maintenance
         /login /logout /session
@@ -62,14 +57,13 @@ after_initialize do
       path = request.path
       return if allowed_prefixes.any? { |p| path.start_with?(p) }
 
-      # JSON/API requests: minimal 503 response (client poller will hard-redirect)
+      # JSON/API requests: minimal 503
       unless request.format.html?
         render json: { error: "maintenance_in_progress" }, status: 503
         return
       end
 
-      # HTML requests: render our maintenance page (no layout)
-      # NEW: set the vars here so the template shows site settings even when the gate renders it
+      # HTML requests: render maintenance page
       @title = SiteSetting.maintenance_mode_title.presence || "We'll be back soon"
       @message = SiteSetting.maintenance_mode_message.presence || "The forum is currently under maintenance. Please check back later."
       @interval = (SiteSetting.maintenance_refresh_interval || 15).to_i
