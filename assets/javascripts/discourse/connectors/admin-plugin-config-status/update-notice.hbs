@@ -1,0 +1,13 @@
+{{#if this.currentUser.admin}}
+  {{#if this.pluginUpdateAvailable}}
+    <div class="alert alert-warning">
+      <strong>⚠ Update available for discourse-maintenance-mode!</strong><br>
+      Installed: {{this.pluginCurrentVersion}}  
+      Latest: {{this.pluginLatestVersion}}  
+      <br>
+      <a href="https://github.com/GamersUnited-pro/discourse-maintenance-plugin/releases" target="_blank">
+        View release on GitHub
+      </a>
+    </div>
+  {{/if}}
+{{/if}}
