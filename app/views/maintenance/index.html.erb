@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <title><%= @title %></title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="refresh" content="<%= @interval %>">
   <style>
     :root {
       --bg1:#0f1220; --bg2:#1a1f3c; --card:#12162a; --acc:#6ee7ff; --acc2:#eab308; --muted:#aab3c5;
@@ -74,22 +75,6 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
   </style>
-
-  <script>
-    (function() {
-      // Auto-redirect when maintenance ends
-      var intervalSec = <%= @interval %> || 15;
-      function poll() {
-        fetch("/site_settings/maintenance_mode_enabled.json", { credentials: "same-origin" })
-          .then(function(r){ return r.ok ? r.json() : { maintenance_mode_enabled: true }; })
-          .then(function(d) {
-            if (d && d.maintenance_mode_enabled === false) window.location.replace("/");
-          })
-          .catch(function(){ /* ignore */ });
-      }
-      setInterval(poll, intervalSec * 1000);
-    })();
-  </script>
 </head>
 <body>
   <div class="card">
@@ -98,6 +83,26 @@
       <p><%= @message %></p>
       <p class="hint">Your place is saved. This page will automatically refresh when we're back.</p>
       <div class="spinner" aria-hidden="true"></div>
+
+      <div style="text-align: center; margin-top: 24px;">
+        <a href="https://forum.gamersunited.pro/login" 
+           style="
+             display: inline-block;
+             padding: 12px 24px;
+             font-size: 16px;
+             font-weight: 600;
+             color: #0f1220;
+             background: linear-gradient(90deg, #6ee7ff, #eab308);
+             border-radius: 12px;
+             text-decoration: none;
+             transition: transform 0.1s ease-in-out;
+           "
+           onmouseover="this.style.transform='scale(1.05)';"
+           onmouseout="this.style.transform='scale(1)';"
+        >
+          Login
+        </a>
+      </div>
     </div>
   </div>
 </body>
