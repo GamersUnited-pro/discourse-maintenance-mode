@@ -36,3 +36,9 @@ plugins:
     client: false
     type: list
     description: "Paths still accessible to guests during maintenance mode"
+
+  maintenance_exempt_groups:
+    default: "staff"
+    client: false
+    type: list
+    description: "Group names whose members bypass maintenance mode (in addition to admins/mods)"
