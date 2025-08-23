@@ -23,7 +23,7 @@ Note: This has been tested when running Discourse in a container.
    ```
 2. Under the `hooks:` → `after_code:` → `cmd:` section (where `docker_manager` is), add:
    ```bash
-   - git clone --branch v1.0.31 https://github.com/GamersUnited-pro/discourse-maintenance-mode.git
+   - git clone --branch main https://github.com/GamersUnited-pro/discourse-maintenance-mode.git
    ```
    
    Example:
@@ -34,7 +34,7 @@ Note: This has been tested when running Discourse in a container.
         cd: $home/plugins
         cmd:
           - git clone https://github.com/discourse/docker_manager.git
-          - git clone --branch v1.0.31 https://github.com/GamersUnited-pro/discourse-maintenance-mode.git
+          - git clone --branch main https://github.com/GamersUnited-pro/discourse-maintenance-mode.git
    ```
 
 3. Rebuild your container:
@@ -45,8 +45,35 @@ Note: This has been tested when running Discourse in a container.
 ### Method 2: Quick one-liner install
 From `/discourse` (wherever you installed the Discourse container), run:
    ```bash
-   echo "- git clone --branch v1.0.31 https://github.com/GamersUnited-pro/discourse-maintenance-mode.git" >> containers/app.yml && ./launcher rebuild app
+   echo "- git clone --branch main https://github.com/GamersUnited-pro/discourse-maintenance-mode.git" >> containers/app.yml && ./launcher rebuild app
    ```
+
+## Updating
+Once an update becomes available, you'll be notified within the Settings section of the plugin.
+To update, execute the following:
+
+1. Make sure you are using the `main` branch in your `app.yml`:
+   ```bash
+   nano containers/app.yml
+
+   Add:
+   - git clone --branch main https://github.com/GamersUnited-pro/discourse-maintenance-mode.git
+   ```
+
+   Example:
+   ```bash
+   hooks:
+   after_code:
+    - exec:
+        cd: $home/plugins
+        cmd:
+          - git clone https://github.com/discourse/docker_manager.git
+          - git clone --branch main https://github.com/GamersUnited-pro/discourse-maintenance-mode.git
+   ```
+2. Rebuild your container:
+   `./launcher rebuild app`
+
+Note: Using a specific version (eg: `- git clone --branch v1.0.31 https://github.com/GamersUnited-pro/discourse-maintenance-mode.git`) in app.yml is also supported
 
 ### Usage
    - Enabled: All non-admin/moderator users see the maintenance page.
