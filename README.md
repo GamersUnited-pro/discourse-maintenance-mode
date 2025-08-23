@@ -39,7 +39,7 @@ Note: This has been tested when running Discourse in a container.
 
 3. Rebuild your container:
    ```bash
-   echo "- git clone --branch v1.0.31 https://github.com/GamersUnited-pro/discourse-maintenance-mode.git" >> containers/app.yml && ./launcher rebuild app
+   ./launcher rebuild app
    ```
 
 ### Method 2: Quick one-liner install
