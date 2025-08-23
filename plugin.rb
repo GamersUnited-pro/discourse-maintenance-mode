@@ -45,15 +45,19 @@ after_initialize do
       return if current_user&.admin? || current_user&.moderator?
 
       # Allowed paths for guests
-      allowed_prefixes = %w[
-        /maintenance
-        /login /logout /session
-        /users /u /user_activations /password /password_resets
-        /assets /plugins /stylesheets /favicon
-        /letter_avatar_proxy /letter_avatar
-        /humans.txt /robots.txt /manifest /service-worker
-        /auth
-      ]
+      #allowed_prefixes = %w[
+      #  /maintenance
+      #  /login /logout /session
+      #  /users /u /user_activations /password /password_resets
+      #  /assets /plugins /stylesheets /favicon
+      #  /letter_avatar_proxy /letter_avatar
+      #  /humans.txt /robots.txt /manifest /service-worker
+      #  /auth
+      #]
+
+      #path = request.path
+      #return if allowed_prefixes.any? { |p| path.start_with?(p) }
+      allowed_prefixes = SiteSetting.maintenance_allowed_paths
 
       path = request.path
       return if allowed_prefixes.any? { |p| path.start_with?(p) }
