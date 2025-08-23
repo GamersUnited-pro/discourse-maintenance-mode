@@ -57,7 +57,8 @@ after_initialize do
 
       #path = request.path
       #return if allowed_prefixes.any? { |p| path.start_with?(p) }
-      allowed_prefixes = SiteSetting.maintenance_allowed_paths
+      #allowed_prefixes = SiteSetting.maintenance_allowed_paths
+      allowed_prefixes = SiteSetting.maintenance_allowed_paths.split('|').map(&:strip)
 
       path = request.path
       return if allowed_prefixes.any? { |p| path.start_with?(p) }
