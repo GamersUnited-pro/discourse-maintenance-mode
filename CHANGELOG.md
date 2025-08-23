@@ -8,3 +8,4 @@
 
 ### Bug Fixes
 - Fixed `allowed_paths` being interpreted as a **string** instead of a **list** (`plugin.rb`).
+- Fixed plugin being enabled/disabled when using the maintenance mode toggle
