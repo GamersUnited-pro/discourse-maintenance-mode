@@ -62,6 +62,11 @@ after_initialize do
       path = request.path
       return if allowed_prefixes.any? { |p| path.start_with?(p) }
 
+      if current_user
+        exempt_groups = SiteSetting.maintenance_exempt_groups
+        return if current_user.groups.any? { |g| exempt_groups.include?(g.name) }
+      end
+
       # JSON/API requests: minimal 503
       unless request.format.html?
         render json: { error: "maintenance_in_progress" }, status: 503
