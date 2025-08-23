@@ -2,6 +2,7 @@ plugins:
   maintenance_mode_enabled:
     default: false
     client: false
+    refresh: true
     type: bool
     description: "Enable maintenance mode for all non-admin/mod users"
 
@@ -27,5 +28,5 @@ plugins:
     default: "GamersUnited-pro/discourse-maintenance-mode"
     client: false
     type: text
-    readonly: true
+    hidden: true
     description: "owner/repo for GitHub release checks (admins only)"
