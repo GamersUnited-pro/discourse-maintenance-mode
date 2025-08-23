@@ -49,7 +49,7 @@ From `/discourse` (wherever you installed the Discourse container), run:
    ```
 
 ## Updating
-Once an update becomes available, you'll be notified within the Settings section of the plugin.
+Once an update becomes available, you'll be notified within the `Settings` section of the plugin.
 To update, execute the following:
 
 1. Make sure you are using the `main` branch in your `app.yml`:
