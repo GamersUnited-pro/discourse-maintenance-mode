@@ -1,7 +1,7 @@
 plugins:
   maintenance_mode_plugin_enabled:
     default: true
-    client: true
+    client: false
     type: bool
     description: "Global plugin status"
     
