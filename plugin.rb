@@ -6,7 +6,7 @@
 # authors: GamersUnited.pro
 # url: https://github.com/GamersUnited-pro/discourse-maintenance-mode
 
-#enabled_site_setting :maintenance_mode_enabled
+enabled_site_setting :maintenance_mode_plugin_enabled
 
 module ::DiscourseMaintenancePlugin
   PLUGIN_NAME = "discourse-maintenance-mode"
