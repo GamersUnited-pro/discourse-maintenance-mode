@@ -1,0 +1,10 @@
+en:
+  site_settings:
+    maintenance_mode_plugin_enabled: "Enable maintenance mode plugin"
+    maintenance_mode_enabled: "Enable maintenance mode"
+    maintenance_mode_title: "Maintenance page title"
+    maintenance_mode_message: "Maintenance page message"
+    maintenance_refresh_interval: "Refresh interval during maintenance (seconds)"
+    maintenance_update_repo: "GitHub repo for update checks"
+    maintenance_allowed_paths: "Allowed paths during maintenance"
+    maintenance_exempt_groups: "Exempt groups during maintenance"
